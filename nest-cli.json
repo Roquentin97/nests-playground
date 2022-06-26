@@ -7,11 +7,13 @@
   "compilerOptions": {
     "webpack": true,
     "tsConfigPath": "apps/mailer/tsconfig.app.json",
-    "assets": [{
-      "include": "**/*.hbs",
-      "outDir": "dist/apps/mailer",
-      "watchAssets": true
-    }],
+    "assets": [
+      {
+        "include": "**/*.hbs",
+        "outDir": "dist/apps/mailer",
+        "watchAssets": true
+      }
+    ],
     "watchAssets": true
   },
   "projects": {
@@ -31,7 +33,18 @@
       "sourceRoot": "apps/mailer/src",
       "compilerOptions": {
         "tsConfigPath": "apps/mailer/tsconfig.app.json",
-        "assets": ["apps/mailer/**/*.hbs"]
+        "assets": [
+          "apps/mailer/**/*.hbs"
+        ]
+      }
+    },
+    "common": {
+      "type": "library",
+      "root": "libs/common",
+      "entryFile": "index",
+      "sourceRoot": "libs/common/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/common/tsconfig.lib.json"
       }
     }
   }
