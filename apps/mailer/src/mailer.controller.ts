@@ -1,12 +1,13 @@
-import { Controller, Get } from '@nestjs/common';
+import { EmailConfirmationDto } from './dtos/EmailConfirmationDto';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { MailerService } from './mailer.service';
 
 @Controller()
 export class MailerController {
   constructor(private readonly mailerService: MailerService) {}
 
-  @Get()
-  getHello(): string {
-    return this.mailerService.getHello();
+  @Post()
+  async sendConfirmationEmail(@Body() payload: EmailConfirmationDto) {
+    await this.mailerService.sendEmailConfirmation(payload)
   }
 }
