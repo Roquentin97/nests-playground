@@ -1,20 +1,12 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
-  "sourceRoot": "apps/mailer/src",
+  "sourceRoot": "apps/authentication/src",
   "monorepo": true,
-  "root": "apps/mailer",
+  "root": "apps/authentication",
   "compilerOptions": {
     "webpack": true,
-    "tsConfigPath": "apps/mailer/tsconfig.app.json",
-    "assets": [
-      {
-        "include": "**/*.hbs",
-        "outDir": "dist/apps/mailer",
-        "watchAssets": true
-      }
-    ],
-    "watchAssets": true
+    "tsConfigPath": "apps/authentication/tsconfig.app.json"
   },
   "projects": {
     "authentication": {
@@ -34,8 +26,13 @@
       "compilerOptions": {
         "tsConfigPath": "apps/mailer/tsconfig.app.json",
         "assets": [
-          "apps/mailer/**/*.hbs"
-        ]
+          {
+            "include": "**/*.hbs",
+            "outDir": "dist/apps/mailer",
+            "watchAssets": true
+          }
+        ],
+        "watchAssets": true
       }
     },
     "common": {
