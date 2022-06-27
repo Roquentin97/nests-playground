@@ -6,6 +6,7 @@ import { MailerService } from './mailer.service';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as Joi from 'joi';
+import { RmqModule } from '@app/common';
 
 @Module({
   imports: [ConfigModule.forRoot({
@@ -39,7 +40,8 @@ import * as Joi from 'joi';
         strict: true
       }
     }
-  }), inject: [ConfigService]})],
+  }), inject: [ConfigService]}),
+RmqModule.register({name: 'MAILER_SERVICE'})],
   controllers: [MailerController],
   providers: [MailerService],
   exports: [MailerService]
