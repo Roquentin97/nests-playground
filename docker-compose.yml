@@ -1,0 +1,68 @@
+version: "3.2"
+services:
+  mailer: 
+    build:
+      context: .
+      dockerfile: ./apps/mailer/Dockerfile
+      target: development
+    command: npm run start:dev mailer
+    environment:
+      - MAILER_HOST=smtp.gmail.com
+      - MAILER_PORT=587
+      - MAILER_USER=${MAILER_USER}
+      - MAILER_PASSWORD=${MAILER_PASSWORD}
+      - MAILER_SECURE
+      - PORT=4000
+    depends_on: 
+      - rabbitmq
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+  auth: 
+    build:
+      context: .
+      dockerfile: ./apps/authentication/Dockerfile
+      target: development
+    command: npm run start:dev authentication
+    depends_on:
+      - db
+      - rabbitmq
+      - mailer
+    environment:
+      # database
+      - DB=nestjs-ms-auth
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=password
+      - DB_SYNCHRONIZE=true
+      # JWT
+      - SAME_SITE_COOKIES
+      - JWT_ACCESS_EXPIRATION=600
+      - JWT_REFRESH_EXPIRATION=2592000
+      - JWT_SECRET=jwt-secret
+      # RMQ
+      - RABBIT_MQ_URI=amqp://rabbitmq:5672
+      - RABBIT_MQ_MAILER_QUEUE=mailer
+      # general
+      - PORT=3000
+      - CLIENT_DOMAIN
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - '3000:3000'
+  db:
+    image: postgres:14-alpine
+    ports:
+      - 5433:5432
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=postgres
+    volumes:
+      - ./migrations:/docker-entrypoint-initdb.d/
+  rabbitmq: 
+    image: rabbitmq
+    ports:
+      - 5673:5672
+      - 15673:15672
